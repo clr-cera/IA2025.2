@@ -3,6 +3,18 @@ from video import VideoMaker
 import heapq
 import cv2
 import numpy as np
+from enum import Enum
+
+
+class Color(Enum):
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
+    GREEN = (0, 255, 0)
+    BLUE = (255, 0, 0)
+    RED = (0, 0, 255)
+    VISITED = (247, 154, 187)
+    PATH = (104, 175, 224)
+    BLOCKED = (142, 118, 247)
 
 
 def distance(a, b):
@@ -22,10 +34,18 @@ def bfs(origin, target, image_num):
         for direction in directions:
             neighbor = (current[0] + direction[0], current[1] + direction[1])
             if 0 <= neighbor[0] < image.shape[1] and 0 <= neighbor[1] < image.shape[0]:
-                if np.array_equal(image[neighbor[1], neighbor[0]], [255, 255, 255]):
+                if np.array_equal(image[neighbor[1], neighbor[0]], Color.WHITE.value):
                     queue.append(neighbor)
-                    image[neighbor[1], neighbor[0]] = [0, 255, 0]  # Mark as visited
-                    video_maker.change_pixel(neighbor[0], neighbor[1], (0, 255, 0))
+                    image[neighbor[1], neighbor[0]] = (
+                        Color.VISITED.value
+                    )  # Mark as visited
+                    video_maker.change_pixel(
+                        neighbor[0], neighbor[1], Color.VISITED.value
+                    )
+                elif np.array_equal(image[neighbor[1], neighbor[0]], Color.BLACK.value):
+                    video_maker.change_pixel(
+                        neighbor[0], neighbor[1], Color.BLOCKED.value
+                    )
     video_maker.release()
 
 
@@ -45,7 +65,7 @@ def astar(origin, target, image_num):
             neighbor = (current[0] + direction[0], current[1] + direction[1])
 
             if 0 <= neighbor[0] < image.shape[1] and 0 <= neighbor[1] < image.shape[0]:
-                if np.array_equal(image[neighbor[1], neighbor[0]], [255, 255, 255]):
+                if np.array_equal(image[neighbor[1], neighbor[0]], Color.WHITE.value):
                     tentative_g_score = g_score[current] + 1
                     if tentative_g_score < g_score.get(neighbor, float("inf")):
                         g_score[neighbor] = tentative_g_score
@@ -53,6 +73,14 @@ def astar(origin, target, image_num):
                             neighbor, target
                         )
                         heapq.heappush(queue, (f_score[neighbor], neighbor))
-                        image[neighbor[1], neighbor[0]] = [0, 255, 0]  # Mark as visited
-                        video_maker.change_pixel(neighbor[0], neighbor[1], (0, 255, 0))
+                        image[neighbor[1], neighbor[0]] = (
+                            Color.VISITED.value
+                        )  # Mark as visited
+                        video_maker.change_pixel(
+                            neighbor[0], neighbor[1], Color.VISITED.value
+                        )
+                elif np.array_equal(image[neighbor[1], neighbor[0]], Color.BLACK.value):
+                    video_maker.change_pixel(
+                        neighbor[0], neighbor[1], Color.BLOCKED.value
+                    )
     video_maker.release()
