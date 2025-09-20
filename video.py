@@ -16,7 +16,6 @@ class VideoMaker:
         self.video.write(self.frame)
 
     def change_pixel(self, x, y, color):
-        print(f"Changing pixel at ({x}, {y}) to color {color}")
         self.frame[y, x] = color
         self.video.write(self.frame)
 
