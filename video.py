@@ -10,7 +10,7 @@ class VideoMaker:
         self.video = cv2.VideoWriter(
             f"{self.title}.avi",
             cv2.VideoWriter_fourcc(*"XVID"),
-            30,
+            512,
             (self.frame.shape[1], self.frame.shape[0]),
         )
         self.video.write(self.frame)
