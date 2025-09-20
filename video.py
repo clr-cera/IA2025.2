@@ -1,6 +1,7 @@
 import cv2
-import numpy as np
 import os
+
+IGNOREDFRAMES = 100
 
 
 class VideoMaker:
@@ -10,14 +11,17 @@ class VideoMaker:
         self.video = cv2.VideoWriter(
             f"{self.title}.avi",
             cv2.VideoWriter_fourcc(*"XVID"),
-            512,
+            64,
             (self.frame.shape[1], self.frame.shape[0]),
         )
         self.video.write(self.frame)
+        self.changes_count = 0
 
     def change_pixel(self, x, y, color):
         self.frame[y, x] = color
-        self.video.write(self.frame)
+        self.changes_count += 1
+        if self.changes_count % IGNOREDFRAMES == 0:
+            self.video.write(self.frame)
 
     def release(self):
         self.video.release()

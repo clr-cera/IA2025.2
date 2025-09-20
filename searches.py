@@ -24,6 +24,7 @@ def bfs(origin, target, image_num):
             if 0 <= neighbor[0] < image.shape[1] and 0 <= neighbor[1] < image.shape[0]:
                 if np.array_equal(image[neighbor[1], neighbor[0]], [255, 255, 255]):
                     queue.append(neighbor)
+                    image[neighbor[1], neighbor[0]] = [0, 255, 0]  # Mark as visited
                     video_maker.change_pixel(neighbor[0], neighbor[1], (0, 255, 0))
     video_maker.release()
 
