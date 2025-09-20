@@ -53,5 +53,6 @@ def astar(origin, target, image_num):
                             neighbor, target
                         )
                         heapq.heappush(queue, (f_score[neighbor], neighbor))
+                        image[neighbor[1], neighbor[0]] = [0, 255, 0]  # Mark as visited
                         video_maker.change_pixel(neighbor[0], neighbor[1], (0, 255, 0))
     video_maker.release()
