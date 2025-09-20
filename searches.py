@@ -10,7 +10,7 @@ def distance(a, b):
 
 
 def bfs(origin, target, image_num):
-    video_maker = VideoMaker("AStar_Visualization", image_num + "_sat.jpg")
+    video_maker = VideoMaker("bfs_Visualization", image_num + "_sat.jpg")
     image = cv2.imread(os.path.join("images", image_num + "_mask.png"))
     queue = [origin]
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
