@@ -33,6 +33,8 @@ def bfs(origin, target, image_num):
     # A máscara é usada para determinar onde pode ou não andar
     image = cv2.imread(os.path.join("images", image_num + "_mask.png"))
     queue = [origin]
+    visited_by = {origin: None}
+    image[origin[1], origin[0]] = Color.VISITED.value
 
     while queue:
         current = queue.pop(0)
@@ -45,6 +47,7 @@ def bfs(origin, target, image_num):
                 # Se é branco (caminho livre) e não foi visitado ainda
                 if np.array_equal(image[neighbor[1], neighbor[0]], Color.WHITE.value):
                     queue.append(neighbor)
+                    visited_by[neighbor] = current
                     image[neighbor[1], neighbor[0]] = (
                         Color.VISITED.value
                     )  # Mark as visited
@@ -56,6 +59,18 @@ def bfs(origin, target, image_num):
                     video_maker.change_pixel(
                         neighbor[0], neighbor[1], Color.BLOCKED.value
                     )
+
+    # Reconstrói o caminho
+    pathnode = target
+    while pathnode != None:
+        video_maker.change_pixel(pathnode[0], pathnode[1], Color.PATH.value)
+        # To make the path more visible, color all neighbors too
+        for direction in DIRECTIONS:
+            neighbor = (pathnode[0] + direction[0], pathnode[1] + direction[1])
+            if 0 <= neighbor[0] < image.shape[1] and 0 <= neighbor[1] < image.shape[0]:
+                video_maker.change_pixel(neighbor[0], neighbor[1], Color.PATH.value)
+        pathnode = visited_by.get(pathnode, None)
+
     # Finaliza o vídeo
     video_maker.release()
 
@@ -72,6 +87,9 @@ def astar(origin, target, image_num):
     # f_score guarda o custo estimado do caminho mais barato até o alvo passando por um nó
     g_score = {origin: 0}
     f_score = {origin: distance(origin, target)}
+
+    image[origin[1], origin[0]] = Color.VISITED.value
+
     while queue:
         current = heapq.heappop(queue)[1]
         if current == target:
