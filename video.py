@@ -1,7 +1,7 @@
 import cv2
 import os
 
-IGNOREDFRAMES = 100
+IGNOREDFRAMES = 64
 
 
 class VideoMaker:
