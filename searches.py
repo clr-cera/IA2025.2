@@ -62,6 +62,63 @@ def bfs(origin, target, image_num):
 
     # Reconstrói o caminho
     pathnode = target
+    video_maker.IGNOREDFRAMES = 16
+    while pathnode != None:
+        video_maker.change_pixel(pathnode[0], pathnode[1], Color.PATH.value)
+        # To make the path more visible, color all neighbors too
+        for direction in DIRECTIONS:
+            neighbor = (pathnode[0] + direction[0], pathnode[1] + direction[1])
+            if 0 <= neighbor[0] < image.shape[1] and 0 <= neighbor[1] < image.shape[0]:
+                video_maker.change_pixel(neighbor[0], neighbor[1], Color.PATH.value)
+        pathnode = visited_by.get(pathnode, None)
+
+    # Finaliza o vídeo
+    video_maker.release()
+
+def dfs(origin, target, image_num):
+    # O vídeo usa a imagem satélite como fundo
+    video_maker = VideoMaker("dfs_Visualization", image_num + "_sat.jpg")
+    # A máscara é usada para determinar onde pode ou não andar
+    image = cv2.imread(os.path.join("images", image_num + "_mask.png"))
+    stack = [origin]
+    visited_by = {origin: None}
+    cost = {origin: 0}
+    image[origin[1], origin[0]] = Color.VISITED.value
+
+    while stack:
+        current = stack.pop(-1)
+        if current == target:
+            break
+        for direction in DIRECTIONS:
+            neighbor = (current[0] + direction[0], current[1] + direction[1])
+            # Se cai fora da imagem, ignora
+            if 0 <= neighbor[0] < image.shape[1] and 0 <= neighbor[1] < image.shape[0]:
+                # Se é branco (caminho livre) e não foi visitado ainda
+                if np.array_equal(image[neighbor[1], neighbor[0]], Color.WHITE.value):
+                    stack.append(neighbor)
+                    
+                    cost[neighbor] = cost[current] + 1
+                    visited_by[neighbor] = current
+                    
+                    image[neighbor[1], neighbor[0]] = (
+                        Color.VISITED.value
+                    )  # Mark as visited
+                    video_maker.change_pixel(
+                        neighbor[0], neighbor[1], Color.VISITED.value
+                    )
+                elif np.array_equal(image[neighbor[1], neighbor[0]], Color.VISITED.value):
+                    if cost.get(neighbor, float("inf")) > cost[current] + 1:
+                        cost[neighbor] = cost[current] + 1
+                        visited_by[neighbor] = current
+
+                # Se é preto (bloco), marca como bloqueado em vermelhinho no vídeo
+                elif np.array_equal(image[neighbor[1], neighbor[0]], Color.BLACK.value):
+                    video_maker.change_pixel(
+                        neighbor[0], neighbor[1], Color.BLOCKED.value
+                    )
+
+    # Reconstrói o caminho
+    pathnode = target
     while pathnode != None:
         video_maker.change_pixel(pathnode[0], pathnode[1], Color.PATH.value)
         # To make the path more visible, color all neighbors too
@@ -122,6 +179,50 @@ def astar(origin, target, image_num):
                     )
     # Reconstrói o caminho
     pathnode = target
+    video_maker.IGNOREDFRAMES = 16
+    while pathnode != None:
+        video_maker.change_pixel(pathnode[0], pathnode[1], Color.PATH.value)
+        # To make the path more visible, color all neighbors too
+        for direction in DIRECTIONS:
+            neighbor = (pathnode[0] + direction[0], pathnode[1] + direction[1])
+            if 0 <= neighbor[0] < image.shape[1] and 0 <= neighbor[1] < image.shape[0]:
+                video_maker.change_pixel(neighbor[0], neighbor[1], Color.PATH.value)
+        pathnode = visited_by.get(pathnode, None)
+    video_maker.release()
+
+
+def hill_climbing(origin, target, image_num):
+    # O vídeo usa a imagem satélite como fundo
+    video_maker = VideoMaker("HillClimbing_Visualization", image_num + "_sat.jpg")
+    # A máscara é usada para determinar onde pode ou não andar
+    image = cv2.imread(os.path.join("images", image_num + "_mask.png"))
+    current = origin
+    visited_by = {origin: None}
+    image[origin[1], origin[0]] = Color.VISITED.value
+
+    while current != target:
+        neighbors = []
+        for direction in DIRECTIONS:
+            neighbor = (current[0] + direction[0], current[1] + direction[1])
+            # Se cai fora da imagem, ignora
+            if 0 <= neighbor[0] < image.shape[1] and 0 <= neighbor[1] < image.shape[0]:
+                # Se é branco (caminho livre) e não foi visitado ainda
+                if np.array_equal(image[neighbor[1], neighbor[0]], Color.WHITE.value):
+                    neighbors.append(neighbor)
+        if not neighbors:
+            break  # Sem mais vizinhos para explorar
+        # Escolhe o vizinho que está mais próximo do alvo
+        next_node = min(neighbors, key=lambda n: distance(n, target))
+        if distance(next_node, target) >= distance(current, target):
+            break  # Nenhum progresso possível
+        visited_by[next_node] = current
+        current = next_node
+        image[current[1], current[0]] = Color.VISITED.value
+        video_maker.change_pixel(current[0], current[1], Color.VISITED.value)
+
+    # Reconstrói o caminho
+    pathnode = current
+    video_maker.IGNOREDFRAMES = 16  # To make the path drawing faster
     while pathnode != None:
         video_maker.change_pixel(pathnode[0], pathnode[1], Color.PATH.value)
         # To make the path more visible, color all neighbors too
