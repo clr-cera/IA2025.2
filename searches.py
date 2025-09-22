@@ -214,7 +214,8 @@ def hill_climbing(origin, target, image_num):
         # Escolhe o vizinho que está mais próximo do alvo
         next_node = min(neighbors, key=lambda n: distance(n, target))
         if distance(next_node, target) >= distance(current, target):
-            break  # Nenhum progresso possível
+            raise Exception('NoPath')
+              #Nenhum progresso possível      
         visited_by[next_node] = current
         current = next_node
         image[current[1], current[0]] = Color.VISITED.value
