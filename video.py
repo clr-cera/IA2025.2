@@ -9,8 +9,8 @@ class VideoMaker:
         self.title = title
         self.frame = cv2.imread(os.path.join("images", image_path))
         self.video = cv2.VideoWriter(
-            f"{self.title}.avi",
-            cv2.VideoWriter_fourcc(*"XVID"),
+            f"{self.title}.mp4",
+            cv2.VideoWriter_fourcc(*"mp4v"),
             64,
             (self.frame.shape[1], self.frame.shape[0]),
         )
