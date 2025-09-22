@@ -1,16 +1,16 @@
 import cv2
 import os
 
-IGNOREDFRAMES = 64
 
 
 class VideoMaker:
     def __init__(self, title, image_path):
+        self.IGNOREDFRAMES = 64
         self.title = title
         self.frame = cv2.imread(os.path.join("images", image_path))
         self.video = cv2.VideoWriter(
-            f"{self.title}.avi",
-            cv2.VideoWriter_fourcc(*"XVID"),
+            f"{self.title}.mp4",
+            cv2.VideoWriter_fourcc(*"mp4v"),
             64,
             (self.frame.shape[1], self.frame.shape[0]),
         )
@@ -20,7 +20,7 @@ class VideoMaker:
     def change_pixel(self, x, y, color):
         self.frame[y, x] = color
         self.changes_count += 1
-        if self.changes_count % IGNOREDFRAMES == 0:
+        if self.changes_count % self.IGNOREDFRAMES == 0:
             self.video.write(self.frame)
 
     def release(self):
