@@ -3,6 +3,8 @@ from tkinter import filedialog, messagebox
 from tkinter.ttk import *
 from PIL import Image, ImageTk
 import numpy as np
+import os
+import searches
 
 CANVAS_DIMENSION = 700
 
@@ -26,10 +28,11 @@ class App():
         # Basic Layout
         Label(self.root, text="Path Finder - 3000: Find shortest road path from satellite imaging", font=("Serif", 25)).pack(pady=20)
 
+        # Top menu
         self.menu_frame = Frame(self.root)
         self.menu_frame.pack(pady=20)
         Button(self.menu_frame, text="Select satellite and mask images", command=self.select_files).pack(side=LEFT, padx=20)
-        self.algo_combobox = Combobox(self.menu_frame,values=["BFS", "DFS", "A*", "Hill-Climb", "Best-First"])
+        self.algo_combobox = Combobox(self.menu_frame,values=["BFS", "DFS", "A*", "Hill-Climb"])
         self.algo_combobox.pack(side=LEFT, padx=20)
         self.algo_combobox.set("BFS")
 
@@ -37,17 +40,52 @@ class App():
         Radiobutton(self.menu_frame, text="Path start", variable=self.toggle_start_end, value="start").pack(side=LEFT, padx=20)
         Radiobutton(self.menu_frame, text="Path end", variable=self.toggle_start_end, value="end").pack(side=LEFT,padx=20)
 
-        Button(self.menu_frame, text="Run path search", command=lambda :print(self.validate_points())).pack(side=LEFT, padx=20)
+        Button(self.menu_frame, text="Run path search", command=self.run_path_finding).pack(side=LEFT, padx=20)
 
 
-
+        # Image canvas
         self.canvas = Canvas(self.root, width=CANVAS_DIMENSION, height=CANVAS_DIMENSION, background="lightgray")
         self.canvas.pack(padx=20, pady=20)
         self.canvas.bind("<Button-1>", self.handle_canvas_click)
 
+        # Begin main loop
         self.root.mainloop()
 
 
+
+
+    def run_path_finding(self):
+        if not self.validate_points():
+            return
+        try:
+            match self.algo_combobox.get():
+                case "BFS":
+                    searches.bfs(
+                        (self.start_coords[1], self.start_coords[0]),
+                        (self.end_coords[1], self.end_coords[0]),
+                        self.satellite_image_path.split(os.sep)[-1].split("_")[0]
+                    )
+                case "DFS":
+                    searches.dfs(
+                        (self.start_coords[1], self.start_coords[0]),
+                        (self.end_coords[1], self.end_coords[0]),
+                        self.satellite_image_path.split(os.sep)[-1].split("_")[0]
+                    )
+                case "A*":
+                    searches.astar(
+                        (self.start_coords[1], self.start_coords[0]),
+                        (self.end_coords[1], self.end_coords[0]),
+                        self.satellite_image_path.split(os.sep)[-1].split("_")[0]
+                    )
+                case "Hill-Climb":
+                    searches.hill_climbing(
+                        (self.start_coords[1], self.start_coords[0]),
+                        (self.end_coords[1], self.end_coords[0]),
+                        self.satellite_image_path.split(os.sep)[-1].split("_")[0]
+                    )
+        except Exception as e:
+            messagebox.showerror("Error", f"No path found by algorithm: {e}")
+            raise e
 
     def handle_canvas_click(self, event):
         if not self.toggle_start_end.get() or not self.satellite_image_path:
@@ -93,8 +131,6 @@ class App():
             return False
         sy, sx = self.start_coords
         ey, ex = self.end_coords
-        for i in range(3):
-            print(self.mask_image_array[sx, sy, i])
         if self.mask_image_array[sx, sy, 0] != 255 or self.mask_image_array[ex, ey, 0] != 255:
             messagebox.showerror("Error", "Points must be on roads")
             return False
