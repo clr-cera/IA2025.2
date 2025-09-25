@@ -62,6 +62,7 @@ def bfs(origin, target, image_num):
 
     # Reconstrói o caminho
     pathnode = target
+    custo_caminho = 1
     video_maker.IGNOREDFRAMES = 16
     while pathnode != None:
         video_maker.change_pixel(pathnode[0], pathnode[1], Color.PATH.value)
@@ -71,9 +72,12 @@ def bfs(origin, target, image_num):
             if 0 <= neighbor[0] < image.shape[1] and 0 <= neighbor[1] < image.shape[0]:
                 video_maker.change_pixel(neighbor[0], neighbor[1], Color.PATH.value)
         pathnode = visited_by.get(pathnode, None)
+        custo_caminho += 1
 
     # Finaliza o vídeo
     video_maker.release()
+    print("Custo do caminho BFS: ", custo_caminho)
+
 
 def dfs(origin, target, image_num):
     # O vídeo usa a imagem satélite como fundo
@@ -96,17 +100,19 @@ def dfs(origin, target, image_num):
                 # Se é branco (caminho livre) e não foi visitado ainda
                 if np.array_equal(image[neighbor[1], neighbor[0]], Color.WHITE.value):
                     stack.append(neighbor)
-                    
+
                     cost[neighbor] = cost[current] + 1
                     visited_by[neighbor] = current
-                    
+
                     image[neighbor[1], neighbor[0]] = (
                         Color.VISITED.value
                     )  # Mark as visited
                     video_maker.change_pixel(
                         neighbor[0], neighbor[1], Color.VISITED.value
                     )
-                elif np.array_equal(image[neighbor[1], neighbor[0]], Color.VISITED.value):
+                elif np.array_equal(
+                    image[neighbor[1], neighbor[0]], Color.VISITED.value
+                ):
                     if cost.get(neighbor, float("inf")) > cost[current] + 1:
                         cost[neighbor] = cost[current] + 1
                         visited_by[neighbor] = current
@@ -173,6 +179,16 @@ def astar(origin, target, image_num):
                         video_maker.change_pixel(
                             neighbor[0], neighbor[1], Color.VISITED.value
                         )
+                if np.array_equal(image[neighbor[1], neighbor[0]], Color.VISITED.value):
+                    tentative_g_score = g_score[current] + 1
+                    # Se esse caminho até o vizinho é melhor, registra ele
+                    if tentative_g_score < g_score.get(neighbor, float("inf")):
+                        visited_by[neighbor] = current
+                        g_score[neighbor] = tentative_g_score
+                        f_score[neighbor] = tentative_g_score + distance(
+                            neighbor, target
+                        )
+                        heapq.heappush(queue, (f_score[neighbor], neighbor))
                 elif np.array_equal(image[neighbor[1], neighbor[0]], Color.BLACK.value):
                     video_maker.change_pixel(
                         neighbor[0], neighbor[1], Color.BLOCKED.value
@@ -180,6 +196,7 @@ def astar(origin, target, image_num):
     # Reconstrói o caminho
     pathnode = target
     video_maker.IGNOREDFRAMES = 16
+    caminho_custo = 1
     while pathnode != None:
         video_maker.change_pixel(pathnode[0], pathnode[1], Color.PATH.value)
         # To make the path more visible, color all neighbors too
@@ -188,7 +205,9 @@ def astar(origin, target, image_num):
             if 0 <= neighbor[0] < image.shape[1] and 0 <= neighbor[1] < image.shape[0]:
                 video_maker.change_pixel(neighbor[0], neighbor[1], Color.PATH.value)
         pathnode = visited_by.get(pathnode, None)
+        caminho_custo += 1
     video_maker.release()
+    print("Custo do caminho A*: ", caminho_custo)
 
 
 def hill_climbing(origin, target, image_num):
@@ -214,8 +233,8 @@ def hill_climbing(origin, target, image_num):
         # Escolhe o vizinho que está mais próximo do alvo
         next_node = min(neighbors, key=lambda n: distance(n, target))
         if distance(next_node, target) >= distance(current, target):
-            raise Exception('NoPath')
-              #Nenhum progresso possível      
+            raise Exception("NoPath")
+            # Nenhum progresso possível
         visited_by[next_node] = current
         current = next_node
         image[current[1], current[0]] = Color.VISITED.value
