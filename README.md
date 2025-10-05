@@ -58,6 +58,8 @@ Eduarda: Durante a realização deste trabalho, contribuí ativamente no desenvo
 
 Augusto: Ao longo do desenvolvimento do projeto, assumi um papel de supervisão, guiando a escolha dos algoritmos de busca, assim como apontando erros e falhas lógicas durante suas respectivas implementações, também prestei auxilio durante a preparação de falas para a apresentação e por fim, apresentei o trabalho.
 
+Felipe: Minha participação no trabalho foi centrada na implementação da interface gráfica do projeto, integrando os algoritmos de busca à lógica de trabalho da aplicação. Fui responsável pela seleção de tecnologia (tkinter), design da interface e conceitualização do fluxo de trabalho e funcionamento da interface, realizando implementação e teste desta. Considero que prestei um bom trabalho, tanto a respeito da aplicação desenvolvida quanto a minha atenção a prazos e ao andamento do projeto. Apesar de trabalhar principalmente na interface gráfica, também estudei profundamento os algoritmos desenvolvidos, de modo a estar apto a apresentar o projeto, caso fosse necessário.
+
 ## Elaboração do Trabalho
 
 O grupo realizou dois encontros presenciais, nos dias 22 e 25 de setembro, nos quais todos os integrantes colaboraram ativamente no desenvolvimento do trabalho proposto e na preparação da apresentação.
