@@ -56,6 +56,8 @@ Augusto: Todos os tópicos e sistemas desenvolvidos durante o projeto foram abor
 
 Eduarda: Durante a realização deste trabalho, contribuí ativamente no desenvolvimento dos algoritmos DFS (Depth-First Search) e Hill Climbing, auxiliei na elaboração dos slides de apresentação e tomei a iniciativa de organizar encontros extras com Rafael para aprimorarmos nossa preparação além de estar sempre alertando o grupo das datas e prazos. Considero que minha participação foi efetiva tanto nos aspectos técnicos quanto na coordenação do grupo, demonstrando comprometimento com o resultado final do projeto.
 
+Augusto: Ao longo do desenvolvimento do projeto, assumi um papel de supervisão, guiando a escolha dos algoritmos de busca, assim como apontando erros e falhas lógicas durante suas respectivas implementações, também prestei auxilio durante a preparação de falas para a apresentação e por fim, apresentei o trabalho.
+
 ## Elaboração do Trabalho
 
 O grupo realizou dois encontros presenciais, nos dias 22 e 25 de setembro, nos quais todos os integrantes colaboraram ativamente no desenvolvimento do trabalho proposto e na preparação da apresentação.
