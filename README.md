@@ -64,6 +64,8 @@ Gabriel: Na atividade em questão, atuei tanto nas etapas de planejamento e idea
 
 Renan: Durante a codificação dos algoritmos de busca estive presente provendo suporte, identificando falhas lógicas e argumentando quais seriam os melhores algoritmos para o nosso caso de uso. Como líder do grupo fui responsável também por delegar as tarefas que foram realizadas. Por último, auxiliei na estruturação da apresentação, design dos slides e coordenei os ensaios.
 
+Rafael: No decorrer do trabalho, pude auxiliar no entendimento da lógica de implementação do Hill-Climbing, ajudando outros membros a compreender seu funcionamento e a desenvolver uma explicação satisfatória para a apresentação do trabalho. Junto à Eduarda, realizamos reuniões extras, nas quais revisamos os slides e o conhecimento geral dos membros sobre o projeto, garantindo assim que não apenas os slides estivessem condizentes, mas também que os membros estivessem preparados para apresentar seus conhecimentos de forma plena.
+
 ## Elaboração do Trabalho
 
 O grupo realizou dois encontros presenciais, nos dias 22 e 25 de setembro, nos quais todos os integrantes colaboraram ativamente no desenvolvimento do trabalho proposto e na preparação da apresentação.
