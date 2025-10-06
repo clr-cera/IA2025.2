@@ -66,6 +66,8 @@ Renan: Durante a codificação dos algoritmos de busca estive presente provendo 
 
 Rafael: No decorrer do trabalho, pude auxiliar no entendimento da lógica de implementação do Hill-Climbing, ajudando outros membros a compreender seu funcionamento e a desenvolver uma explicação satisfatória para a apresentação do trabalho. Junto à Eduarda, realizamos reuniões extras, nas quais revisamos os slides e o conhecimento geral dos membros sobre o projeto, garantindo assim que não apenas os slides estivessem condizentes, mas também que os membros estivessem preparados para apresentar seus conhecimentos de forma plena.
 
+Clara: No trabalho, eu contribui tendo a ideia de realizar busca em imagens em um grafo de pixeis, encontrei o dataset com as imagens de satélites e máscaras, e configurei o ambiente de desenvolvimento. Além disso, prototipei o projeto com a geração de vídeo e os primeiros algoritmos de busca que nós desenvolvemos. Além disso, ajudei a dividir as tarefas e a coordenar o desenvolvimento.
+
 ## Elaboração do Trabalho
 
 O grupo realizou dois encontros presenciais, nos dias 22 e 25 de setembro, nos quais todos os integrantes colaboraram ativamente no desenvolvimento do trabalho proposto e na preparação da apresentação.
