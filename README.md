@@ -62,6 +62,7 @@ Felipe: Minha participação no trabalho foi centrada na implementação da inte
 
 Gabriel: Na atividade em questão, atuei tanto nas etapas de planejamento e idealização de possíveis soluções quanto no desenvolvimento, auxiliando na implementação de algoritmos como Hill Climbing e DFS. Também contribuí no processamento e organização de dados, garantindo que ficassem adequados para a apresentação e para o uso interno do projeto. Além disso, participei ativamente da elaboração da apresentação, definindo o fluxo de informações, o modelo dos slides e a seleção dos dados mais relevantes. Considero que estive presente em todas as fases, do planejamento até a apresentação final, o que me permitiu ampliar meu conhecimento sobre a disciplina, aprimorar o trabalho em equipe e colaborar com meus colegas para a entrega de um projeto de maior qualidade.
 
+Renan: Durante a codificação dos algoritmos de busca estive presente provendo suporte, identificando falhas lógicas e argumentando quais seriam os melhores algoritmos para o nosso caso de uso. Como líder do grupo fui responsável também por delegar as tarefas que foram realizadas. Por último, auxiliei na estruturação da apresentação, design dos slides e coordenei os ensaios.
 
 ## Elaboração do Trabalho
 
