@@ -60,6 +60,9 @@ Augusto: Ao longo do desenvolvimento do projeto, assumi um papel de supervisão,
 
 Felipe: Minha participação no trabalho foi centrada na implementação da interface gráfica do projeto, integrando os algoritmos de busca à lógica de trabalho da aplicação. Fui responsável pela seleção de tecnologia (tkinter), design da interface e conceitualização do fluxo de trabalho e funcionamento da interface, realizando implementação e teste desta. Considero que prestei um bom trabalho, tanto a respeito da aplicação desenvolvida quanto a minha atenção a prazos e ao andamento do projeto. Apesar de trabalhar principalmente na interface gráfica, também estudei profundamento os algoritmos desenvolvidos, de modo a estar apto a apresentar o projeto, caso fosse necessário.
 
+Gabriel: Na atividade em questão, atuei tanto nas etapas de planejamento e idealização de possíveis soluções quanto no desenvolvimento, auxiliando na implementação de algoritmos como Hill Climbing e DFS. Também contribuí no processamento e organização de dados, garantindo que ficassem adequados para a apresentação e para o uso interno do projeto. Além disso, participei ativamente da elaboração da apresentação, definindo o fluxo de informações, o modelo dos slides e a seleção dos dados mais relevantes. Considero que estive presente em todas as fases, do planejamento até a apresentação final, o que me permitiu ampliar meu conhecimento sobre a disciplina, aprimorar o trabalho em equipe e colaborar com meus colegas para a entrega de um projeto de maior qualidade.
+
+
 ## Elaboração do Trabalho
 
 O grupo realizou dois encontros presenciais, nos dias 22 e 25 de setembro, nos quais todos os integrantes colaboraram ativamente no desenvolvimento do trabalho proposto e na preparação da apresentação.
