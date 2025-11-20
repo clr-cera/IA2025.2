@@ -1,0 +1,15 @@
+[project]
+name = "trabalho2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "notebook>=7.5.0",
+    "numpy>=2.3.5",
+    "pandas>=2.3.3",
+    "pyarrow>=22.0.0",
+    "scikit-learn>=1.7.2",
+    "statsmodels>=0.14.5",
+    "unidecode>=1.4.0",
+]
