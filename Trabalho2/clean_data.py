@@ -42,6 +42,10 @@ def clean():
     # Select residencial properties
     residencial_df = selected[selected['property_type'].isin(["Casa", "Apartamento"])]
 
+    # Based on the EDA notebook, we shall remove nonsense outliers from the area_util column
+    residencial_df = residencial_df[residencial_df['area_util'] > 10]
+
+
     # Cleaning null values
     clean_data = residencial_df.copy()
     clean_data = clean_data.dropna(
@@ -50,6 +54,7 @@ def clean():
     clean_data = clean_data.drop(columns=['total_monthly_cost', 'suites', 'property_tax'])
     clean_data_sell = clean_data[~clean_data["sale_price"].isnull()].drop(columns=["rent_price"])
     clean_data_rent = clean_data[~clean_data["rent_price"].isnull()].drop(columns=["sale_price"])
+
 
     # save to csv
     clean_data_rent.to_csv("data/clean_data_rent.csv", index=False)
