@@ -36,7 +36,8 @@ def clean():
         'publisher_name',
         'publisher_phone',
         'price_per_sqm_rent',
-        'price_per_sqm_sale'
+        'price_per_sqm_sale',
+        "has_gym" # No true values
     ]))
 
     # Select residencial properties
