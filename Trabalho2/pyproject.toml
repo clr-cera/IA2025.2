@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "cupy>=13.6.0",
     "notebook>=7.5.0",
     "numpy>=2.3.5",
     "pandas>=2.3.3",
@@ -14,4 +15,5 @@ dependencies = [
     "seaborn>=0.13.2",
     "statsmodels>=0.14.5",
     "unidecode>=1.4.0",
+    "xgboost>=3.1.2",
 ]
