@@ -67,7 +67,7 @@ class ModelInterface:
 
         self.xgb = XGBRegressor(**base_params)
         self.xgb.load_model("models/xgb_model.json")
-        self.std_data = pd.read_csv("data/std_data.csv")
+        #self.std_data = pd.read_csv("data/std_data.csv")
         self.full_data = pd.read_csv("data/clean_data_sell.csv")
 
     # Use a dictionary or pandas row as input, with all the columns/fields used in the model (modelling.ipynb)
