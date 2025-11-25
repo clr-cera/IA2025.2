@@ -44,7 +44,7 @@ def convert_to_xbg(df : pd.DataFrame) -> pd.DataFrame:
 
     Y = df["sale_price"]
     # Numerical variables (unaltered)
-    num = df.select_dtypes(include = "number").drop(columns=["sale_price", "exp(area_util)", "exp(area_total)"])
+    num = df.select_dtypes(include = "number").drop(columns=["sale_price", "exp(area_util)", "exp(area_total)"], errors="ignore")
     boolean = df.select_dtypes(include = "boolean")
     cat = df.select_dtypes(include = "object").astype("category")
     X = pd.concat([num, boolean, cat], axis = 1)
@@ -69,6 +69,8 @@ class ModelInterface:
         self.xgb.load_model("models/xgb_model.json")
         #self.std_data = pd.read_csv("data/std_data.csv")
         self.full_data = pd.read_csv("data/clean_data_sell.csv")
+        self.rent_model = XGBRegressor(**base_params)
+        self.rent_model.load_model("xgb_model_rent.json")
 
     # Use a dictionary or pandas row as input, with all the columns/fields used in the model (modelling.ipynb)
     def standardize_record(self, record: pd.DataFrame) -> pd.DataFrame:
@@ -126,7 +128,7 @@ class ModelInterface:
         # Standardize remaining numeric columns
         for col in num_cols:
             if col in std_record.columns:
-                limit = ss.quantile(self.full_data[col], 0.80)
+                limit = ss.quantile(self.full_data[col], 0.99)
                 mean_val = ss.tmean(self.full_data[col], limits=(None, limit))
                 std_val = ss.tstd(self.full_data[col], limits=(None, limit))
                 std_record[col] = (std_record[col] - mean_val) / std_val
@@ -151,13 +153,15 @@ class ModelInterface:
             "glm" : glm_pred,
             "xgb" : xgb_pred
         }
+    def predict_rent(self, record : pd.DataFrame):
+        return self.rent_model.predict(convert_to_xbg(record))
 
 
 
 if __name__ == "__main__" :
     record = pd.DataFrame({'property_code': '84210-S',
  'property_type': 'Casa',
- 'property_subtype': 'Padrão',
+ # 'property_subtype': 'Padrão',
  'sale_price': np.float64(800000.0),
  'bedrooms': np.int64(2),
  'bathrooms': np.int64(1),
@@ -176,7 +180,9 @@ if __name__ == "__main__" :
  'has_closet': np.False_,
  'has_office': np.False_,
  'has_pantry': np.False_,
- 'size_category': 'large',
- 'amenity_score': np.int64(1)}, index=[0])
+ # 'size_category': 'large',
+ # 'amenity_score': np.int64(1)
+                           }
+                          , index=[0])
     api = ModelInterface()
-    api.get_predictions(record)
+    api.predict_rent(record)

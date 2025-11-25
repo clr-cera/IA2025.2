@@ -124,9 +124,9 @@ if predict_button:
 
     with c2:
         st.subheader("📙 GLM Gamma")
-        g = float(result["glm"]["mean"]) * 1000
-        g_up = float(result["glm"]["mean_ci_upper"]) * 1000
-        g_low = float(result["glm"]["mean_ci_lower"]) * 1000
+        g = float(result["glm"]["mean"]) * 10000
+        g_up = float(result["glm"]["mean_ci_upper"]) * 10000
+        g_low = float(result["glm"]["mean_ci_lower"]) * 10000
         st.write(f"**Preço estimado:** R${g:,.2f}")
         st.write(f"Alta: R${g_up:,.2f}")
         st.write(f"Baixa: R${g_low:,.2f}")
