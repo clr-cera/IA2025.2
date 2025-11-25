@@ -133,6 +133,9 @@ class ModelInterface:
 
         return std_record
 
+    # ("sale_price ~ bedrooms + bathrooms + parking_spaces + area_total + C(property_type) + "
+    #  "condominium_fee + has_pool + has_bbq + has_playground +has_sauna + has_party_room + has_sports_court + "
+    #  "has_24h_security + has_laundry + has_closet + has_office + has_pantry + amenity_score")
     def get_predictions(self, record : pd.DataFrame, alpha = 0.05):
         std_record = self.standardize_record(record)
         print(dict(std_record.iloc[0]))
