@@ -39,15 +39,26 @@ def get_gamma_prediction_interval(model, X_new, alpha=0.05, n_simulations=10000)
         'obs_ci_upper': upper
     }
 
-def convert_to_xbg(df : pd.DataFrame) -> pd.DataFrame:
-    df = df.drop(columns="property_code")
+def convert_to_xbg(df: pd.DataFrame, allowed_features: list[str] | None = None) -> pd.DataFrame:
+    """Prepare DataFrame for XGBoost; optional allowed_features keeps only trained columns."""
+    # Drop identifiers if present
+    df = df.drop(columns=["property_code"], errors="ignore")
 
-    Y = df["sale_price"]
+    if allowed_features is not None:
+        missing = [c for c in allowed_features if c not in df.columns]
+        if missing:
+            raise ValueError(f"Faltam colunas obrigatórias: {missing}")
+        # Reorder to match training feature order
+        df = df[allowed_features]
+
     # Numerical variables (unaltered)
-    num = df.select_dtypes(include = "number").drop(columns=["sale_price", "exp(area_util)", "exp(area_total)"], errors="ignore")
-    boolean = df.select_dtypes(include = "boolean")
-    cat = df.select_dtypes(include = "object").astype("category")
-    X = pd.concat([num, boolean, cat], axis = 1)
+    num = df.select_dtypes(include="number").drop(
+        columns=["sale_price", "exp(area_util)", "exp(area_total)"],
+        errors="ignore"
+    )
+    boolean = df.select_dtypes(include="boolean")
+    cat = df.select_dtypes(include="object").astype("category")
+    X = pd.concat([num, boolean, cat], axis=1)
     return X
 
 
@@ -71,6 +82,16 @@ class ModelInterface:
         self.full_data = pd.read_csv("data/clean_data_sell.csv")
         self.rent_model = XGBRegressor(**base_params)
         self.rent_model.load_model("xgb_model_rent.json")
+        # Booster may not expose feature_names; fallback to known training columns
+        booster_feats = self.rent_model.get_booster().feature_names
+        self.rent_features = booster_feats or [
+            "bedrooms", "bathrooms", "parking_spaces",
+            "area_util", "area_total", "condominium_fee",
+            "has_pool", "has_bbq", "has_playground", "has_sauna",
+            "has_party_room", "has_sports_court", "has_24h_security",
+            "has_laundry", "has_closet", "has_office", "has_pantry",
+            "property_type"
+        ]
 
     # Use a dictionary or pandas row as input, with all the columns/fields used in the model (modelling.ipynb)
     def standardize_record(self, record: pd.DataFrame) -> pd.DataFrame:
@@ -154,7 +175,7 @@ class ModelInterface:
             "xgb" : xgb_pred
         }
     def predict_rent(self, record : pd.DataFrame):
-        return self.rent_model.predict(convert_to_xbg(record))
+        return self.rent_model.predict(convert_to_xbg(record, allowed_features=self.rent_features))
 
 
 

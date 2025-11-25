@@ -23,7 +23,7 @@ h1 {
 
 
 st.markdown("<h1>🏡 Predição de Valores Imobiliários</h1>", unsafe_allow_html=True)
-st.write("Insira abaixo os dados do imóvel para obter estimativas de preço usando três modelos estatísticos.")
+st.write("Insira abaixo os dados do imóvel para obter estimativas de preço de venda ou aluguel.")
 
 @st.cache_resource
 def load_api():
@@ -34,6 +34,8 @@ api = load_api()
 
 
 st.header("📋 Preencha os dados do imóvel")
+
+pred_type = st.radio("Tipo de predição", ["Venda", "Aluguel"], horizontal=True)
 
 col1, col2 = st.columns(2)
 
@@ -106,33 +108,39 @@ if predict_button:
         "amenity_score": 0
     }])
 
-    result = api.get_predictions(record)
+    if pred_type == "Venda":
+        result = api.get_predictions(record)
 
-    st.markdown("<h2>📊 Resultados da Predição</h2>", unsafe_allow_html=True)
+        st.markdown("<h2>📊 Resultados da Predição de Venda</h2>", unsafe_allow_html=True)
 
-    c1, c2, c3 = st.columns(3)
+        c1, c2, c3 = st.columns(3)
 
 
-    with c1:
-        st.subheader("📘 Linear Model (OLS)")
-        lp = float(result["ols"]["mean"]) * 100000
-        lp_up = float(result["ols"]["mean_ci_upper"]) * 100000
-        lp_low = float(result["ols"]["mean_ci_lower"]) * 100000
-        st.write(f"**Preço estimado:** R${lp:,.2f}")
-        st.write(f"Alta: R${lp_up:,.2f}")
-        st.write(f"Baixa: R${lp_low:,.2f}")
+        with c1:
+            st.subheader("📘 Linear Model (OLS)")
+            lp = float(result["ols"]["mean"]) * 100000
+            lp_up = float(result["ols"]["mean_ci_upper"]) * 100000
+            lp_low = float(result["ols"]["mean_ci_lower"]) * 100000
+            st.write(f"**Preço estimado:** R${lp:,.2f}")
+            st.write(f"Alta: R${lp_up:,.2f}")
+            st.write(f"Baixa: R${lp_low:,.2f}")
 
-    with c2:
-        st.subheader("📙 GLM Gamma")
-        g = float(result["glm"]["mean"]) * 10000
-        g_up = float(result["glm"]["mean_ci_upper"]) * 10000
-        g_low = float(result["glm"]["mean_ci_lower"]) * 10000
-        st.write(f"**Preço estimado:** R${g:,.2f}")
-        st.write(f"Alta: R${g_up:,.2f}")
-        st.write(f"Baixa: R${g_low:,.2f}")
+        with c2:
+            st.subheader("📙 GLM Gamma")
+            g = float(result["glm"]["mean"]) * 10000
+            g_up = float(result["glm"]["mean_ci_upper"]) * 10000
+            g_low = float(result["glm"]["mean_ci_lower"]) * 10000
+            st.write(f"**Preço estimado:** R${g:,.2f}")
+            st.write(f"Alta: R${g_up:,.2f}")
+            st.write(f"Baixa: R${g_low:,.2f}")
 
-    with c3:
-        st.subheader("📗 XGBoost")
-        xp = float(result["xgb"][0]) * 100000
-        st.write(f"**Preço estimado:** R${xp:,.2f}")
-
+        with c3:
+            st.subheader("📗 XGBoost")
+            xp = float(result["xgb"][0]) * 100000
+            st.write(f"**Preço estimado:** R${xp:,.2f}")
+    else:
+        rent_pred = api.predict_rent(record)
+        st.markdown("<h2>📊 Resultado da Predição de Aluguel</h2>", unsafe_allow_html=True)
+        st.subheader("🏢 XGBoost - Aluguel")
+        rent_price = float(rent_pred[0])
+        st.write(f"**Aluguel estimado:** R${rent_price:,.2f}")
